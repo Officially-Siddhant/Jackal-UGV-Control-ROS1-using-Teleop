@@ -1,0 +1,21 @@
+catkin_ws/
+├── build/                   
+├── devel/                     
+├── src/                      
+	   └── jacky_control/         # custom package
+
+               └── CMakeLists.txt     # Package-specific CMake file (use symlink to top-level)
+
+      	   └── package.xml        # Package manifest (dependencies, metadata)
+
+               └── launch/            # Launch files
+
+                         └── jackal_teleop_key.launch
+
+               └── scripts/           # Python nodes
+
+                         └── jackal_teleop_key.py
+
+               └── README.md         
+
+└── CMakeLists.txt             # Top-level CMake file (provided by catkin)

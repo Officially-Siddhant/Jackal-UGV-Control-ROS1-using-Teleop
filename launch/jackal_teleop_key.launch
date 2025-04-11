@@ -1,0 +1,15 @@
+<launch>
+  <!-- turtlebot_teleop_key already has its own built in velocity smoother -->
+  <node pkg="jacky_control" type="jackal_teleop_key.py" name="jackal_teleop_keyboard"  output="screen">
+    <param name="scale_linear" value="0.5" type="double"/>
+    <param name="scale_angular" value="1.5" type="double"/>
+    <!--This section allows:
+	•	Autonomous nav (e.g., /move_base) to also send velocity commands
+	•	Only one source to control the robot at a time, with defined priority
+	•	Safe fallback to stop if no source is active
+    <remap from="bluetooth_teleop/cmd_vel" to="/jackal_velocity_controller/cmd_vel"/>
+    <remap from="bluetooth_teleop/cmd_vel" to="/cmd_vel_mux/input/teleop"/>
+    -->
+    <remap from="~cmd_vel" to="/jackal_velocity_controller/cmd_vel"/>
+  </node>
+</launch>
