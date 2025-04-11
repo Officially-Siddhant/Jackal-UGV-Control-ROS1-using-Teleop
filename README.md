@@ -1,5 +1,8 @@
 # Jackal UGV Control (ROS 1) using Teleop
 A ROS 1 package for teleoperating the Clearpath Jackal UGV using keyboard input. Velocities are smoothly ramped. The teleop node publishes velocity commands to `/jackal_velocity_controller/cmd_vel`. This node uses termios for capturing keyboard input — it must be run in a terminal.
+
+![](jackal.gif)
+
 ## Package Name
 `jacky_control`
 ### Features
