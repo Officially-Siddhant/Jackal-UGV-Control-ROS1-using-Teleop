@@ -1,61 +1,79 @@
-# Jackal UGV Control (ROS 1) using Teleop
-A ROS 1 package for teleoperating the Clearpath Jackal UGV using keyboard input. Velocities are smoothly ramped. The teleop node publishes velocity commands to `/jackal_velocity_controller/cmd_vel`. This node uses termios for capturing keyboard input — it must be run in a terminal.
+# Jackal UGV Control (ROS 2 Foxy) using Teleop
+
+A ROS 2 package for teleoperating the Clearpath Jackal UGV using keyboard input. Velocities are smoothly ramped. The teleop node publishes velocity commands to `/jackal_velocity_controller/cmd_vel`. This node uses `termios` for capturing keyboard input — it must be run in a terminal or inside a terminal emulator like `xterm`.
 
 ![](jackal.gif)
 
 ## Package Name
-`jacky_control`
+
+`jacky_control_ros2`
+
 ### Features
 
 - Classic 9-key keyboard layout (`u`, `i`, `o`, `j`, `k`, `l`, `m`, `,`, `.`)
 - Publishes to `/jackal_velocity_controller/cmd_vel`
 - Supports smooth velocity ramping
+- Compatible with ROS 1 Jackal UGV via `ros1_bridge`
+
 
 ### Dependencies
-The following ROS 1 packages are required to build and use the bridge:
-- `rospy`
+
+ROS 2 packages:
+- `rclpy`
 - `geometry_msgs`
-- `catkin`
-- `roscpp`
-- `roslaunch` (for roscore executable)
-- `rosmsg`
-- `std_msgs` and `geometry_msgs`
-as well as the Python package `rospkg`
+- `launch_ros`
 
-##  Setup
+ROS 1–2 bridging:
+- `ros1_bridge` (dynamic bridge)
 
-### Prerequisites:
-ROS1 Noetic Installation - http://wiki.ros.org/noetic/Installation <br/>
-Jackal UGV Simulator - https://www.clearpathrobotics.com/assets/guides/noetic/jackal/simulation.html
+## Setup
 
-### Simulation:
+### Prerequisites
 
-1. #### Running the Simulator<br/>
-   - If you follow the link, you'll realize that the simulator isn't a package hosted in a workspace i.e., doesn't have to be cloned.
-   - Note: Jackal UGV Simulator can be installed to your home directory.
-   - Source ROS1 Environment and start ROS Master
-     - `$ source /opt/ros/noetic`
-     - `$ roscore`
-     - Open a new terminal.
-  
-2. #### Running the teleop node
-   - Clone this repository to your workspace i.e., to: <br/> `$ catkin_ws/src` or the equivalent.
-   - Build the workspace:<br/>
-     `$ cd ~/path_to_catkin_ws/`<br/>
-   `$ catkin_make --pkg jacky_control`<br/>
-   `$ source devel/setup.bash`
-   - Launch the Simulated Jackal in a simple example world:<br/>
-   `$ roslaunch jackal_gazebo jackal_world.launch`
-   - In another terminal, launch the teleop node:<br/>
-   `roslaunch jacky_control jackal_teleop_key.launch`
-   - You may alternatively run the node directly:<br/>
-   `rosrun jacky_control jackal_teleop_key.py`
+- ROS 1 Noetic and ROS 2 Foxy installed and sourced
+- Jackal UGV Simulator (ROS 1) installed: [Setup Instructions](https://www.clearpathrobotics.com/assets/guides/noetic/jackal/simulation.html)
+- `ros1_bridge` built from source (for dynamic bridging)
 
-### License
 
-This project includes code originally licensed under the [BSD 3-Clause License](https://opensource.org/licenses/BSD-3-Clause).<br/>
+###  Simulation
+#### 1. Build the package
 
-© 2011 Willow Garage, Inc. — Modified by Siddhant Baroth, 2025
+```bash
+cd ~/swarm_ws  # or your ROS 2 workspace
+colcon build --symlink-install --packages-select jacky_control_ros2
+source install/setup.bash
+```
+Make the python node an executable. Here, the executable is not contained within a `scripts` folder. You may customize it to be that way, however, be sure to make the respective changes in the `setup.py` file within the package directory. 
+```bash
+chmod +x src/jacky_control_ros2/jacky_control_ros2/jackal_teleop_key.py
+```
+#### 2. Running the Simulation
+**Step 1: Launch the ROS1 Jackal UGV Simulator** 
+```bash
+# Terminal 1 (ROS 1)
+source /opt/ros/noetic/setup.bash
+roscore
+```
+Open another terminal, and in that...
+```bash
+# Terminal 2 (still ROS 1)
+source /opt/ros/noetic/setup.bash
+roslaunch jackal_gazebo jackal_world.launch
+```
+**Step 2: Bring-up the ROS bridge**
+```bash
+# Terminal 3 - here source both ROS installations
+source /opt/ros/noetic/setup.bash
+source /opt/ros/foxy/setup.bash
+ros2 run ros1_bridge dynamic_bridge
+```
+**Step 3: Run the ROS 2 Teleop Node**
+```bash
+# Terminal 4 (ROS 2)
+source ~/swarm_ws/install/setup.bash
+ros2 run jacky_control_ros2 jackal_teleop_key
+```
+This node captures key presses via `termios`. It must run in a TTY terminal — not via ros2 launch, unless wrapped with xterm -e.
+If you wish to use `ros2 launch ...` then install `xterm` package using `sudo apt install xterm`
 
-### Author:
-❄️Siddhant Baroth, 2025
+And there you have it! You can now control the Jackal UGV using the keyboard in ROS2. 
