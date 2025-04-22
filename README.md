@@ -1,14 +1,16 @@
 # Jackal UGV Control (ROS 1) using Teleop
-A ROS 1 package for teleoperating the Clearpath Jackal UGV using keyboard input. Velocities are smoothly ramped. The teleop node publishes velocity commands to `/jackal_velocity_controller/cmd_vel`. This node uses termios for capturing keyboard input — it must be run in a terminal.
-
-![](jackal.gif)
+A ROS 1 package for teleoperating the Clearpath Jackal UGV using keyboard input. Velocities are smoothly ramped. The teleop node publishes velocity commands to `/jackalX/jackal_velocity_controller/cmd_vel` for each respective UGV. This node uses termios for capturing keyboard input — it must be run in a terminal.
 
 ## Package Name
-`jacky_control`
+`multi_jackal_tutorials`
 ### Features
 
-- Classic 9-key keyboard layout (`u`, `i`, `o`, `j`, `k`, `l`, `m`, `,`, `.`)
-- Publishes to `/jackal_velocity_controller/cmd_vel`
+- Supports controlling 2 or 3 Jackal UGVs simultaneously
+- Classic 9-key keyboard layout for each Jackal:
+  - `jackal0`: `u`, `i`, `o`, `j`, `k`, `l`, `m`, `,`, `.`
+  - `jackal1`: `r`, `t`, `y`, `f`, `g`, `h`, `v`, `b`, `n`
+  - `jackal2`: `q`, `w`, `e`, `a`, `s`, `d`, `z`, `x`, `c`
+- Publishes to `/jackalX/jackal_velocity_controller/cmd_vel`
 - Supports smooth velocity ramping
 
 ### Dependencies
@@ -22,7 +24,7 @@ The following ROS 1 packages are required to build and use the bridge:
 - `std_msgs` and `geometry_msgs`
 as well as the Python package `rospkg`
 
-##  Setup
+## Setup
 
 ### Prerequisites:
 ROS1 Noetic Installation - http://wiki.ros.org/noetic/Installation <br/>
@@ -42,14 +44,13 @@ Jackal UGV Simulator - https://www.clearpathrobotics.com/assets/guides/noetic/ja
    - Clone this repository to your workspace i.e., to: <br/> `$ catkin_ws/src` or the equivalent.
    - Build the workspace:<br/>
      `$ cd ~/path_to_catkin_ws/`<br/>
-   `$ catkin_make --pkg jacky_control`<br/>
-   `$ source devel/setup.bash`
-   - Launch the Simulated Jackal in a simple example world:<br/>
-   `$ roslaunch jackal_gazebo jackal_world.launch`
+     `$ catkin_make --pkg multi_jackal_tutorials`<br/>
+     `$ source devel/setup.bash`
+   - Launch the Simulated Jackals:<br/>
+     `$ roslaunch multi_jackal_tutorials three_jackal.launch`
    - In another terminal, launch the teleop node:<br/>
-   `roslaunch jacky_control jackal_teleop_key.launch`
-   - You may alternatively run the node directly:<br/>
-   `rosrun jacky_control jackal_teleop_key.py`
+     `rosrun multi_jackal_tutorials multi_jackal_teleop.py`
+   - You will be prompted to enter the number of Jackals to control: enter `2` or `3` as required.
 
 ### License
 
@@ -58,4 +59,4 @@ This project includes code originally licensed under the [BSD 3-Clause License](
 © 2011 Willow Garage, Inc. — Modified by Siddhant Baroth, 2025
 
 ### Author:
-❄️Siddhant Baroth, 2025
+❄️ Siddhant Baroth, 2025
